@@ -1,7 +1,11 @@
-import image_to_token
-import image_identification
+import memento
 
 if __name__ == "__main__":
-    #image_to_token.image_to_token()
-    image_identification.image_identification('./test_1.jpg')
-    image_identification.image_identification('./test_2.jpg')
+    memento_obj = memento.Memento()
+    #memento_obj.image_to_token()
+    #memento_obj.set_user_id()
+    #memento_obj.init_faceset()
+    memento_obj.search_faceset('./test_1.jpg')
+    memento_obj.search_faceset('./test_2.jpg')
+    #memento_obj.image_identification('./test_1.jpg')
+    #memento_obj.image_identification('./test_2.jpg')

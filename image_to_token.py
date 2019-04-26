@@ -26,6 +26,7 @@ def get_name(folder_path):
 
 
 def image_to_token():
+    print("Get tokens of all images")
     # 初始化对象，进行api的调用工作
     api = API()
 

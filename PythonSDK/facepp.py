@@ -26,9 +26,12 @@ __all__ = ['File', 'APIError', 'API']
 DEBUG_LEVEL = 1
 
 # 添加API Key API Secret
-API_KEY = "mYz-0WhCzV2i7JwEXHFqnqIHvEMehMlr"
-API_SECRET = "86SZRliLpdyeWDKA_hWfaGjFuTQtDdlK"
+#API_KEY = "mYz-0WhCzV2i7JwEXHFqnqIHvEMehMlr"
+#API_SECRET = "86SZRliLpdyeWDKA_hWfaGjFuTQtDdlK"
 
+# ADD API Key API Secret
+API_KEY = "TMudLI3HaUJHxTwWmhO0Kci7imjKmtcV"
+API_SECRET = "FHiFaN6vUHyFJme1kDFdakffY1aQ66bX"
 
 class File(object):
 
@@ -77,7 +80,7 @@ class APIError(Exception):
 class API(object):
     key = None
     secret = None
-    server = 'https://api-cn.faceplusplus.com'
+    server = 'https://api-us.faceplusplus.com'
 
     decode_result = True
     timeout = None
