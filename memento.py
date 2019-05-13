@@ -84,13 +84,15 @@ class Memento(object):
         self.new_root = 'new_images/'
 
     def image_to_token(self):
-        print("Getting tokens of all images")
+        print("Getting tokens of images")
 
         all_folder_paths = glob.glob(os.path.join(self.root, '*'))
 
         for i, folder_path in enumerate(all_folder_paths):
             name = get_name(folder_path)
+            print(name)
             output_path = os.path.join(self.root, name, name+".txt")
+            print(output_path)
             output_file = open(output_path, 'w')
             all_image_paths = glob.glob(os.path.join(folder_path, "*.jpg"))
             #print(all_image_paths)
@@ -107,7 +109,7 @@ class Memento(object):
 
 
     def set_user_id(self):
-        print("Setting user id for all tokens")
+        print("Setting user_id for images")
 
         all_folder_paths = glob.glob(os.path.join(self.root, '*'))
 
@@ -131,14 +133,14 @@ class Memento(object):
         print_result(printFuctionTitle("delete_face_response"), result)
 
         result = self.api.faceset.delete(outer_id = "memento")
-        print_result(printFuctionTitle("delete_response"), result)
+        print_result(printFuctionTitle("delete_faceset_response"), result)
 
 
     def init_faceset(self):
         print("Initializing faceset")
 
         result = self.api.faceset.create(outer_id = "memento")
-        print_result(printFuctionTitle("create_response"), result)
+        print_result(printFuctionTitle("create_faceset_response"), result)
 
         all_folder_paths = glob.glob(os.path.join(self.root, '*'))
 
