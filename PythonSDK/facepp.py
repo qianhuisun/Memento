@@ -187,8 +187,9 @@ class _APIProxy(object):
 
         if self._api.decode_result:
             try:
-                print(str(ret))
-                ret = json.loads(str(ret), object_hook=ObjectDict)
+                # change due to compatibility problem with python 3.5
+                #print(str(ret))
+                ret = json.loads(ret.decode('utf-8'), object_hook=ObjectDict)
             except:
                 raise APIError(-1, url, 'json decode error, value={0!r}'.format(ret))
         return ret
