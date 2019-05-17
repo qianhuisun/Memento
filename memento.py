@@ -70,7 +70,8 @@ def get_token(result):
 
 # get the name of a person by the folder path
 def get_name(folder_path):
-    return folder_path.split('\\')[-1]
+    folder_path.replace('\\', '/')
+    return folder_path.split('/')[-1]
 
 
 class Memento(object):
@@ -92,9 +93,9 @@ class Memento(object):
 
         for i, folder_path in enumerate(all_folder_paths):
             name = get_name(folder_path)
-            print(name)
+            #print(name)
             output_path = os.path.join(self.original_root, name, name+".txt")
-            print(output_path)
+            #print(output_path)
             output_file = open(output_path, 'w')
             all_image_paths = glob.glob(os.path.join(folder_path, "*.jpg"))
             #print(all_image_paths)
