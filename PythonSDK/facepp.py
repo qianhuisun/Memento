@@ -187,6 +187,7 @@ class _APIProxy(object):
 
         if self._api.decode_result:
             try:
+                # change due to compatibility problem with python 3.5
                 #print(str(ret))
                 ret = json.loads(ret.decode('utf-8'), object_hook=ObjectDict)
             except:
