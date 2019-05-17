@@ -1,5 +1,6 @@
 import os
 import glob
+import shutil
 # import PythonSDK
 from PythonSDK.facepp import API,File
 from pprint import pformat
@@ -80,26 +81,24 @@ class Memento(object):
         :root: The relative path of images repositery.
         """
         self.api = API()
-        self.root = 'images/'
+        self.original_root = 'original_images/'
         self.new_root = 'new_images/'
+        self.webcam_root = 'webcam/'
 
     def image_to_token(self):
-        print("Getting tokens of images")
+        print("Getting tokens for images...")
 
-        all_folder_paths = glob.glob(os.path.join(self.root, '*'))
+        all_folder_paths = glob.glob(os.path.join(self.original_root, '*'))
 
         for i, folder_path in enumerate(all_folder_paths):
             name = get_name(folder_path)
             print(name)
-            output_path = os.path.join(self.root, name, name+".txt")
+            output_path = os.path.join(self.original_root, name, name+".txt")
             print(output_path)
             output_file = open(output_path, 'w')
             all_image_paths = glob.glob(os.path.join(folder_path, "*.jpg"))
             #print(all_image_paths)
             for j, image_path in enumerate(all_image_paths):
-                #result = self.api.detect(image_file = File(image_path), return_attributes = "gender,age,smiling,"
-                #                                                                    "emotion,ethnicity,beauty,"
-                #                                                                    "mouthstatus,skinstatus")
                 result = self.api.detect(image_file = File(image_path))
                 #print(str(result))
                 face_token = get_token(str(result))
@@ -107,15 +106,17 @@ class Memento(object):
                 output_file.write(face_token+'\n')
             output_file.close()
 
+        print("Getting tokens done.")
+
 
     def set_user_id(self):
-        print("Setting user_id for images")
+        print("Setting user_id for images...")
 
-        all_folder_paths = glob.glob(os.path.join(self.root, '*'))
+        all_folder_paths = glob.glob(os.path.join(self.original_root, '*'))
 
         for i, folder_path in enumerate(all_folder_paths):
             name = get_name(folder_path)
-            token_path = os.path.join(self.root, name, name+".txt")
+            token_path = os.path.join(self.original_root, name, name+".txt")
             token_file = open(token_path, 'r')
             # set user id for all tokens
             while True:
@@ -125,9 +126,22 @@ class Memento(object):
                 result = self.api.face.setuserid(face_token = face_token, user_id = name)
             token_file.close()
 
+        print("Setting user_id done.")
+
 
     def delete_faceset(self):
-        print("Deleting faceset")
+        print("Deleting faceset...")
+
+        if os.path.exists(self.new_root):
+            shutil.rmtree(self.new_root)
+            print("Directory", self.new_root, "is deleted!")
+        else:
+            print("Directory", self.new_root, "doesn't exist!")
+        if os.path.exists(self.new_root):
+            print("Directory", self.new_root, "already exists!")
+        else:
+            os.mkdir(self.new_root)
+            print("Directory", self.new_root, "is created!")
 
         result = self.api.faceset.removeface(outer_id = "memento", face_tokens = "RemoveAllFaceTokens")
         print_result(printFuctionTitle("delete_face_response"), result)
@@ -135,18 +149,20 @@ class Memento(object):
         result = self.api.faceset.delete(outer_id = "memento")
         print_result(printFuctionTitle("delete_faceset_response"), result)
 
+        print("Deleting faceset done.")
+
 
     def init_faceset(self):
-        print("Initializing faceset")
+        print("Creating faceset...")
 
         result = self.api.faceset.create(outer_id = "memento")
         print_result(printFuctionTitle("create_faceset_response"), result)
 
-        all_folder_paths = glob.glob(os.path.join(self.root, '*'))
+        all_folder_paths = glob.glob(os.path.join(self.original_root, '*'))
 
         for i, folder_path in enumerate(all_folder_paths):
             name = get_name(folder_path)
-            token_path = os.path.join(self.root, name, name+".txt")
+            token_path = os.path.join(self.original_root, name, name+".txt")
             token_file = open(token_path, 'r')
             # add all tokens into the faceset
             while True:
@@ -157,9 +173,11 @@ class Memento(object):
                 result = self.api.faceset.addface(outer_id = "memento", face_tokens = face_token)
             token_file.close()
 
+        print("Creating faceset done.")
+
 
     def search_faceset(self, image_path):
-        print("Searching", image_path, "in the faceset")
+        print("Searching", image_path, "in the faceset...")
 
         result = self.api.search(image_file = File(image_path), outer_id = "memento", return_result_count = 5)
         print_result(printFuctionTitle("response"), result)
@@ -170,26 +188,43 @@ class Memento(object):
         if user_id == -1:
             print("Error: Attempt to analyze more faces than the API returns!")
         elif user_id == 0:
-            print("It's a new face. Please add a new face category into faceset!")
+            print("It's a new face.")
+            name = input("Please give a name: ")
+            self.fetch_images(name)
+            self.append_faceset(name)
         elif isinstance(user_id, float):
             print("It's probably a new face, because the confidence is only", user_id)
+            name = input("Please give a name: ")
+            self.fetch_images(name)
+            self.append_faceset(name)
         else:
             print("It's", user_id)
-        print('\n')
 
+        print("Searching done.")
+
+
+    # name: name of the new person
+    def fetch_images(self, name):
+        dirName = self.new_root + name
+        if not os.path.exists(dirName):
+            os.mkdir(dirName)
+            print("Directory", dirName, "is created!")
+        else:
+            print("Directory", dirName, "already exists!")
+        for i, jpgfile in enumerate(glob.glob(os.path.join(self.webcam_root, "*.jpg"))):
+            if i < 5:
+                shutil.copy(jpgfile, dirName)
     
-    # e.g. folder_path = images/new_person_1
-    def append_faceset(self, folder_path):
-        print("Appending new face category into faceset")
+
+    # name: name of the new person
+    def append_faceset(self, name):
+        print("Appending new face category into faceset...")
 
         # grab all images, set their face_token and user_id, append them into faceset, and output local token_file
-        all_folder_paths = glob.glob(os.path.join(self.new_root, '*'))
-        name = get_name(all_folder_paths[0])
-        #print(name)
-        output_path = os.path.join(self.new_root, name, name+".txt")
-        #print(output_path)
+        dirName = self.new_root + name
+        output_path = os.path.join(dirName, name+".txt")
         token_file = open(output_path, 'w')
-        all_image_paths = glob.glob(os.path.join(all_folder_paths[0], "*.jpg"))
+        all_image_paths = glob.glob(os.path.join(dirName, "*.jpg"))
         for i, image_path in enumerate(all_image_paths):
             result = self.api.detect(image_file = File(image_path))
             face_token = get_token(str(result))
@@ -199,8 +234,15 @@ class Memento(object):
             result = self.api.faceset.addface(outer_id = "memento", face_tokens = face_token)
             #print(str(result))
         token_file.close()
-
         
+        print("Appending done.")
+
+
+
+    '''
+    old version: use api.detect()
+    '''
+    '''
     def image_identification(self, image_path):
         print("Identifying", image_path)
 
@@ -209,14 +251,14 @@ class Memento(object):
                                                                                     "mouthstatus,skinstatus")
         face_token_1 = get_token(str(result))
 
-        all_folder_paths = glob.glob(os.path.join(self.root, '*'))
+        all_folder_paths = glob.glob(os.path.join(self.original_root, '*'))
 
         max_confidence = 0.0
         max_confidence_name = ''
 
         for i, folder_path in enumerate(all_folder_paths):
             name = get_name(folder_path)
-            token_path = os.path.join(self.root, name, name+".txt")
+            token_path = os.path.join(self.original_root, name, name+".txt")
             token_file = open(token_path, 'r')
             # get the average confidence of current person
             token_count = 0
@@ -240,4 +282,4 @@ class Memento(object):
             print("This person is", max_confidence_name, "\n")
         else:
             print("Not matched!")
-            
+    '''
