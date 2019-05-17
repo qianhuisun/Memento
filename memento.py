@@ -70,7 +70,7 @@ def get_token(result):
 
 # get the name of a person by the folder path
 def get_name(folder_path):
-    folder_path.replace('\\', '/')
+    folder_path = folder_path.replace('\\', '/')
     return folder_path.split('/')[-1]
 
 
