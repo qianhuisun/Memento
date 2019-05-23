@@ -2,6 +2,7 @@ image_identification.py
 image_to_token.py
 init_faceset.py
 set_user_id.py
+init_image_folder.py
 
 images/
 webcam/
