@@ -84,7 +84,7 @@ class Memento(object):
         self.api = API()
         self.original_root = 'original_images/'
         self.new_root = 'new_images/'
-        self.webcam_root = 'webcam/'
+        self.webcam_root = '../webcam/'
 
     def image_to_token(self):
         print("Getting tokens for images...")
@@ -178,8 +178,10 @@ class Memento(object):
 
 
     # search faceset for current face, return conclusion
-    def search_faceset(self, image_path, threshold):
+    def search_faceset(self, threshold):
         #print("Searching", image_path, "in the faceset...")
+
+        image_path = glob.glob(os.path.join(self.webcam_root, '*'))[0]
 
         result = self.api.search(image_file = File(image_path), outer_id = "memento", return_result_count = 5)
         #print_result(printFuctionTitle("response"), result)
