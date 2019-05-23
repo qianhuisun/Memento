@@ -213,6 +213,8 @@ class Memento(object):
 
     # fetch images from wabcam folder and save them in "name" folder within new_image folder
     def fetch_images(self, name):
+        if not os.path.exists(self.new_root):
+            os.mkdir(self.new_root)
         dirName = self.new_root + name
         if not os.path.exists(dirName):
             os.mkdir(dirName)
