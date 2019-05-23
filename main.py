@@ -12,7 +12,7 @@ def init_faceset():
 
 def detect_face():
     memento_obj = memento.Memento()
-    memento_obj.search_faceset('./test_person_1.jpg')
+    memento_obj.search_faceset('./test_person_2.jpg')
     memento_obj.search_faceset('./test_person_2.jpg')
 
 
