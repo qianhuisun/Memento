@@ -5,6 +5,8 @@ usage:
     api = API(key, secret)
     api.detect(img = File('/tmp/test.jpg'))
 """
+//memento
+import Image
 
 import sys
 import socket
