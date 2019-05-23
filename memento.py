@@ -29,7 +29,7 @@ def analyze_result(result, threshold, n):
     first_user_id = ''
     min_confidence = 100
     for i in range(0, n):
-        confidence = get_confidence(str(result))
+        confidence = float(get_confidence(str(result)))
         if confidence == -1:
             return -1
         min_confidence = min(min_confidence, confidence)
@@ -59,7 +59,7 @@ def get_confidence(result):
     if confidence_location == -1:
         return -1
     confidence = result[confidence_location+14:confidence_location+20]
-    return float(confidence.split(',')[0])
+    return confidence.split(',')[0]
 
 # extract toke value from API response
 def get_token(result):
