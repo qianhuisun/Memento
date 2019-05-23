@@ -197,13 +197,13 @@ class Memento(object):
             #name = input("Please give a name: ")
             #self.fetch_images(name)
             #self.append_faceset(name)
-            return "New Face!"
+            return "new_face"
         elif isinstance(user_id, float):
             #print("It's probably a new face, confidence: ", user_id)
             #name = input("Please give a name: ")
             #self.fetch_images(name)
             #self.append_faceset(name)
-            return "New Face! if threshold > " + str(user_id)
+            return "new_faceC_confidence_" + str(user_id)
         else:
             #print("It's", user_id)
             return user_id

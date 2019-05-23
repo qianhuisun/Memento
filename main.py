@@ -1,7 +1,10 @@
 import sys
 import memento
 import time
+import requests
 
+URL_PRE = "http://eecs338.herokuapp.com/setname/"
+PARAMS = {'address':'Northwestern'} 
 
 def init_faceset():
     memento_obj = memento.Memento()
@@ -20,6 +23,9 @@ def detect_face(threshold):
         if res == last_res:
             continue
         else:
+            URL = URL_PRE + res
+            for i in range(0,5):
+                requests.get(url = URL, params = PARAMS) 
             print(res)
             last_res = res
         
