@@ -191,7 +191,7 @@ class Memento(object):
         #print(printFuctionTitle("conclusion"))
         if user_id == -1:
             #print("Error: Attempt to analyze more faces than the API returns!")
-            return "Error: Attempt to analyze more faces than the API returns!"
+            return "no_face"
         elif user_id == 0:
             #print("It's a new face.")
             #name = input("Please give a name: ")
