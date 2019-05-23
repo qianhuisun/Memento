@@ -18,7 +18,7 @@ def detect_face(threshold):
     memento_obj = memento.Memento()
     last_res = ""
     while True:
-        time.sleep(5)
+        time.sleep(3)
         res = memento_obj.search_faceset(threshold)
         if res == last_res:
             continue
@@ -29,7 +29,6 @@ def detect_face(threshold):
             print(res)
             last_res = res
         
-
 
 if __name__ == "__main__":
     if len(sys.argv) == 2 and sys.argv[1] == '-init':

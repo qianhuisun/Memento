@@ -40,7 +40,7 @@ def analyze_result(result, threshold, n):
             if user_id != first_user_id:
                 return 0
         result = result[user_id_location+12:]
-    if min_confidence > threshold:
+    if min_confidence >= threshold:
         return first_user_id
     else:
         return min_confidence
@@ -55,11 +55,12 @@ def get_id(result):
 
 # extract confidence value from API response
 def get_confidence(result):
+    print(result)
     confidence_location = result.find('\'confidence\'')
     if confidence_location == -1:
         return -1
     confidence = result[confidence_location+14:confidence_location+20]
-    return confidence.split(',')[0]
+    return confidence.split('.')[0]
 
 # extract toke value from API response
 def get_token(result):
@@ -203,7 +204,7 @@ class Memento(object):
             #name = input("Please give a name: ")
             #self.fetch_images(name)
             #self.append_faceset(name)
-            return "new_faceC_confidence_" + str(user_id)
+            return "new_face_confidence_" + str(user_id)
         else:
             #print("It's", user_id)
             return user_id
