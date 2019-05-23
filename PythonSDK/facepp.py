@@ -46,7 +46,7 @@ class File(object):
     def _get_content(self):
         """read image content"""
 
-        if os.path.getsize(self.path) > 2 * 1024 * 1024:
+        if os.path.getsize(self.path) > 3 * 1024 * 1024:
             raise APIError(-1, None, 'image file size too large')
         else:
             with open(self.path, 'rb') as f:
