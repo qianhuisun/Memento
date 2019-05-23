@@ -177,34 +177,39 @@ class Memento(object):
         print("Creating faceset done.")
 
 
-    def search_faceset(self, image_path):
-        print("Searching", image_path, "in the faceset...")
+    # search faceset for current face, return conclusion
+    def search_faceset(self, image_path, threshold):
+        #print("Searching", image_path, "in the faceset...")
 
         result = self.api.search(image_file = File(image_path), outer_id = "memento", return_result_count = 5)
-        print_result(printFuctionTitle("response"), result)
+        #print_result(printFuctionTitle("response"), result)
 
         # analyze the result 
-        user_id = analyze_result(str(result), 65.0, 3)
-        print(printFuctionTitle("conclusion"))
+        user_id = analyze_result(str(result), threshold, 3)
+        #print(printFuctionTitle("conclusion"))
         if user_id == -1:
-            print("Error: Attempt to analyze more faces than the API returns!")
+            #print("Error: Attempt to analyze more faces than the API returns!")
+            return "Error: Attempt to analyze more faces than the API returns!"
         elif user_id == 0:
-            print("It's a new face.")
-            name = input("Please give a name: ")
-            self.fetch_images(name)
-            self.append_faceset(name)
+            #print("It's a new face.")
+            #name = input("Please give a name: ")
+            #self.fetch_images(name)
+            #self.append_faceset(name)
+            return "New Face!"
         elif isinstance(user_id, float):
-            print("It's probably a new face, because the confidence is only", user_id)
-            name = input("Please give a name: ")
-            self.fetch_images(name)
-            self.append_faceset(name)
+            #print("It's probably a new face, confidence: ", user_id)
+            #name = input("Please give a name: ")
+            #self.fetch_images(name)
+            #self.append_faceset(name)
+            return "New Face! if threshold > " + str(user_id)
         else:
-            print("It's", user_id)
+            #print("It's", user_id)
+            return user_id
 
-        print("Searching done.")
+        #print("Searching done.")
 
 
-    # name: name of the new person
+    # fetch images from wabcam folder and save them in "name" folder within new_image folder
     def fetch_images(self, name):
         dirName = self.new_root + name
         if not os.path.exists(dirName):
@@ -217,7 +222,7 @@ class Memento(object):
                 shutil.copy(jpgfile, dirName)
     
 
-    # name: name of the new person
+    # append a new category with "name" to the faceset
     def append_faceset(self, name):
         print("Appending new face category into faceset...")
 

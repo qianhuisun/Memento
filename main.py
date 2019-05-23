@@ -1,5 +1,6 @@
 import sys
 import memento
+import time
 
 
 def init_faceset():
@@ -10,18 +11,24 @@ def init_faceset():
     memento_obj.init_faceset()
 
 
-def detect_face():
+def detect_face(threshold):
     memento_obj = memento.Memento()
-    memento_obj.search_faceset('./test_person_2.jpg')
-    memento_obj.search_faceset('./test_person_2.jpg')
+    last_res = ""
+    while True:
+        time.sleep(2)
+        res = memento_obj.search_faceset('./test_person_2.jpg', threshold)
+        if res == last_res:
+            continue
+        else:
+            print(res)
+            last_res = res
+        
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 2 and sys.argv[1] == 'init':
+    if len(sys.argv) == 2 and sys.argv[1] == '-init':
         init_faceset()
-    elif len(sys.argv) == 2 and sys.argv[1] == 'detect':
-        detect_face()
+    elif len(sys.argv) == 3 and sys.argv[1] == '-detect':
+        detect_face(float(sys.argv[2]))
     else:
-        print('possible parameter: init, detect')
-    #memento_obj.image_identification('./test_1.jpg')
-    #memento_obj.image_identification('./test_2.jpg')
+        print('possible parameter:\n -init\n -detect threshold')
