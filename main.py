@@ -16,7 +16,7 @@ def detect_face(threshold):
     last_res = ""
     while True:
         time.sleep(2)
-        res = memento_obj.search_faceset('./test_person_2.jpg', threshold)
+        res = memento_obj.search_faceset('../webcam/test_person_2.jpg', threshold)
         if res == last_res:
             continue
         else:
