@@ -55,7 +55,7 @@ def get_id(result):
 
 # extract confidence value from API response
 def get_confidence(result):
-    print(result)
+    #print(result)
     confidence_location = result.find('\'confidence\'')
     if confidence_location == -1:
         return -1
@@ -87,6 +87,7 @@ class Memento(object):
         self.new_root = 'new_images/'
         self.webcam_root = '../webcam/'
 
+    # get face_token for all images in original image folder
     def image_to_token(self):
         print("Getting tokens for images...")
 
@@ -111,6 +112,7 @@ class Memento(object):
         print("Getting tokens done.")
 
 
+    # combine user_id to face_token for all images in original image folder
     def set_user_id(self):
         print("Setting user_id for images...")
 
@@ -131,19 +133,13 @@ class Memento(object):
         print("Setting user_id done.")
 
 
+    # delete the faceset to prepare creating it again
     def delete_faceset(self):
         print("Deleting faceset...")
 
         if os.path.exists(self.new_root):
             shutil.rmtree(self.new_root)
-            print("Directory", self.new_root, "is deleted!")
-        else:
-            print("Directory", self.new_root, "doesn't exist!")
-        if os.path.exists(self.new_root):
-            print("Directory", self.new_root, "already exists!")
-        else:
-            os.mkdir(self.new_root)
-            print("Directory", self.new_root, "is created!")
+        os.mkdir(self.new_root)
 
         result = self.api.faceset.removeface(outer_id = "memento", face_tokens = "RemoveAllFaceTokens")
         print_result(printFuctionTitle("delete_face_response"), result)
@@ -154,7 +150,8 @@ class Memento(object):
         print("Deleting faceset done.")
 
 
-    def init_faceset(self):
+    # create a new faceset for all images
+    def create_faceset(self):
         print("Creating faceset...")
 
         result = self.api.faceset.create(outer_id = "memento")
@@ -219,17 +216,15 @@ class Memento(object):
         dirName = self.new_root + name
         if not os.path.exists(dirName):
             os.mkdir(dirName)
-            print("Directory", dirName, "is created!")
-        else:
-            print("Directory", dirName, "already exists!")
         for i, jpgfile in enumerate(glob.glob(os.path.join(self.webcam_root, "*.jpg"))):
-            if i < 5:
-                shutil.copy(jpgfile, dirName)
-    
+            if i < 1:
+                for j in range(1,6):
+                    shutil.copy(jpgfile, dirName+"/"+str(j)+".jpg")
+
 
     # append a new category with "name" to the faceset
     def append_faceset(self, name):
-        print("Appending new face category into faceset...")
+        #print("Appending new face category into faceset...")
 
         # grab all images, set their face_token and user_id, append them into faceset, and output local token_file
         dirName = self.new_root + name

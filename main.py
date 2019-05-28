@@ -11,11 +11,12 @@ def init_faceset():
     memento_obj.image_to_token()
     memento_obj.set_user_id()
     memento_obj.delete_faceset()
-    memento_obj.init_faceset()
+    memento_obj.create_faceset()
 
 
 def detect_face(threshold):
     memento_obj = memento.Memento()
+    new_person_counter = 0
     last_res = ""
     while True:
         time.sleep(3)
@@ -23,11 +24,28 @@ def detect_face(threshold):
         if res == last_res:
             continue
         else:
-            URL = URL_PRE + res
-            for i in range(0,5):
-                requests.get(url = URL, params = PARAMS) 
-            print(res)
-            last_res = res
+            if res == "new_face" and new_person_counter < 20:
+                new_person_counter += 1
+                new_name = "new_person_"+ str(new_person_counter)
+                URL = URL_PRE + "adding_" + new_name
+                # post detection result to web server 5 times
+                for i in range(0,5):
+                    requests.get(url = URL, params = PARAMS) 
+                print("adding_" + new_name)
+                memento_obj.fetch_images(new_name)
+                memento_obj.append_faceset(new_name)
+                URL = URL_PRE + new_name + "_added"
+                # post detection result to web server 5 times
+                for i in range(0,5):
+                    requests.get(url = URL, params = PARAMS) 
+                print(new_name + "_added")
+            else:
+                URL = URL_PRE + res
+                # post detection result to web server 5 times
+                for i in range(0,5):
+                    requests.get(url = URL, params = PARAMS) 
+                print(res)
+                last_res = res
         
 
 if __name__ == "__main__":
