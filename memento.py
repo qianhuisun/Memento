@@ -181,6 +181,11 @@ class Memento(object):
 
         image_path = glob.glob(os.path.join(self.webcam_root, '*'))[0]
 
+        if not os.path.exists('../backup'):
+            print("creating folder")
+            os.mkdir('../backup')
+        shutil.copy(image_path, '../backup/tmp.jpg')
+
         result = self.api.search(image_file = File(image_path), outer_id = "memento", return_result_count = 5)
         #print_result(printFuctionTitle("response"), result)
 
@@ -201,7 +206,8 @@ class Memento(object):
             #name = input("Please give a name: ")
             #self.fetch_images(name)
             #self.append_faceset(name)
-            return "new_face_confidence_" + str(user_id)
+            return "new_face"
+            #return "new_face_confidence_" + str(user_id)
         else:
             #print("It's", user_id)
             return user_id
@@ -216,10 +222,10 @@ class Memento(object):
         dirName = self.new_root + name
         if not os.path.exists(dirName):
             os.mkdir(dirName)
-        for i, jpgfile in enumerate(glob.glob(os.path.join(self.webcam_root, "*.jpg"))):
+        for i, jpgfile in enumerate(glob.glob(os.path.join('../backup', "*.jpg"))):
             if i < 1:
                 for j in range(1,6):
-                    shutil.copy(jpgfile, dirName+"/"+str(j)+".jpg")
+                    shutil.copyfile(jpgfile, dirName+"/"+str(j)+".jpg")
 
 
     # append a new category with "name" to the faceset
