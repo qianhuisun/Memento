@@ -142,10 +142,10 @@ class Memento(object):
         os.mkdir(self.new_root)
 
         result = self.api.faceset.removeface(outer_id = "memento", face_tokens = "RemoveAllFaceTokens")
-        print_result(printFuctionTitle("delete_face_response"), result)
+        #print_result(printFuctionTitle("delete_face_response"), result)
 
         result = self.api.faceset.delete(outer_id = "memento")
-        print_result(printFuctionTitle("delete_faceset_response"), result)
+        #print_result(printFuctionTitle("delete_faceset_response"), result)
 
         print("Deleting faceset done.")
 
@@ -155,7 +155,7 @@ class Memento(object):
         print("Creating faceset...")
 
         result = self.api.faceset.create(outer_id = "memento")
-        print_result(printFuctionTitle("create_faceset_response"), result)
+        #print_result(printFuctionTitle("create_faceset_response"), result)
 
         all_folder_paths = glob.glob(os.path.join(self.original_root, '*'))
 
@@ -164,12 +164,16 @@ class Memento(object):
             token_path = os.path.join(self.original_root, name, name+".txt")
             token_file = open(token_path, 'r')
             # add all tokens into the faceset
+            tokens = ""
             while True:
                 face_token = token_file.readline()[:-1]
                 if not face_token:
                     break
-                # NOTE can upload 5 tokens at the same time
-                result = self.api.faceset.addface(outer_id = "memento", face_tokens = face_token)
+                tokens = tokens + face_token + ","
+            if tokens != "":
+                tokens = tokens[:-1]
+            # NOTE can upload 5 tokens at the same time
+            result = self.api.faceset.addface(outer_id = "memento", face_tokens = tokens)
             token_file.close()
 
         print("Creating faceset done.")

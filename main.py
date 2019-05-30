@@ -14,12 +14,18 @@ def init_faceset():
     memento_obj.create_faceset()
 
 
+def rollback_faceset():
+    memento_obj = memento.Memento()
+    memento_obj.delete_faceset()
+    memento_obj.create_faceset()
+
+
 def detect_face(threshold):
     memento_obj = memento.Memento()
     new_person_counter = 0
     last_res = ""
     while True:
-        time.sleep(3)
+        time.sleep(1)
         res = memento_obj.search_faceset(threshold)
         if res == last_res:
             continue
@@ -51,6 +57,8 @@ def detect_face(threshold):
 if __name__ == "__main__":
     if len(sys.argv) == 2 and sys.argv[1] == '-init':
         init_faceset()
+    elif len(sys.argv) == 2 and sys.argv[1] == '-rollback':
+        rollback_faceset()
     elif len(sys.argv) == 3 and sys.argv[1] == '-detect':
         detect_face(float(sys.argv[2]))
     else:
