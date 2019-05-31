@@ -198,7 +198,7 @@ class Memento(object):
         #print_result(printFuctionTitle("response"), result)
 
         # analyze the result 
-        user_id = analyze_result(str(result), threshold, 3)
+        user_id = analyze_result(str(result), threshold, 1)
         #print(printFuctionTitle("conclusion"))
         if user_id == -1:
             #print("Error: Attempt to analyze more faces than the API returns!")
