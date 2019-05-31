@@ -33,10 +33,13 @@ def analyze_result(result, threshold, n):
         if confidence == -1:
             return -1
         min_confidence = min(min_confidence, confidence)
+        print(min_confidence, end = " ")
         if i == 0:
             user_id_location, first_user_id = get_id(result)
+            print(first_user_id)
         else:
             user_id_location, user_id = get_id(result)
+            print(user_id)
             if user_id != first_user_id:
                 return 0
         result = result[user_id_location+12:]
@@ -166,6 +169,7 @@ class Memento(object):
             # add all tokens into the faceset
             tokens = ""
             while True:
+                print(tokens)
                 face_token = token_file.readline()[:-1]
                 if not face_token:
                     break
@@ -255,7 +259,7 @@ class Memento(object):
         result = self.api.faceset.addface(outer_id = "memento", face_tokens = tokens)
         token_file.close()
         
-        print("Appending done.")
+        #print("Appending done.")
 
 
 

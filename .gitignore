@@ -7,4 +7,4 @@ init_image_folder.py
 images/
 webcam/
 Classmates/
-original_images/
+original_images/*/*.jpg
