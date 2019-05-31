@@ -241,14 +241,18 @@ class Memento(object):
         output_path = os.path.join(dirName, name+".txt")
         token_file = open(output_path, 'w')
         all_image_paths = glob.glob(os.path.join(dirName, "*.jpg"))
+        tokens = ""
         for i, image_path in enumerate(all_image_paths):
             result = self.api.detect(image_file = File(image_path))
             face_token = get_token(str(result))
             token_file.write(face_token+'\n')
             result = self.api.face.setuserid(face_token = face_token, user_id = name)
             #print(str(result))
-            result = self.api.faceset.addface(outer_id = "memento", face_tokens = face_token)
-            #print(str(result))
+            tokens = tokens + face_token + ","
+        if tokens != "":
+            tokens = tokens[:-1]
+        # NOTE can upload 5 tokens at the same time
+        result = self.api.faceset.addface(outer_id = "memento", face_tokens = tokens)
         token_file.close()
         
         print("Appending done.")
