@@ -33,7 +33,7 @@ def analyze_result(result, threshold, n):
         if confidence == -1:
             return -1
         min_confidence = min(min_confidence, confidence)
-        print(min_confidence, end = " ")
+        print("Debug info: ", min_confidence, end = " ")
         if i == 0:
             user_id_location, first_user_id = get_id(result)
             print(first_user_id)
@@ -194,11 +194,11 @@ class Memento(object):
             os.mkdir('../backup')
         shutil.copy(image_path, '../backup/tmp.jpg')
 
-        result = self.api.search(image_file = File(image_path), outer_id = "memento", return_result_count = 5)
+        result = self.api.search(image_file = File('../backup/tmp.jpg'), outer_id = "memento", return_result_count = 5)
         #print_result(printFuctionTitle("response"), result)
 
         # analyze the result 
-        user_id = analyze_result(str(result), threshold, 1)
+        user_id = analyze_result(str(result), threshold, 2)
         #print(printFuctionTitle("conclusion"))
         if user_id == -1:
             #print("Error: Attempt to analyze more faces than the API returns!")
