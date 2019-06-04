@@ -25,7 +25,8 @@ def detect_face(threshold):
     new_person_counter = 0
     last_res = ""
     while True:
-        time.sleep(1)
+        time.sleep(2)
+        print("Debug info: Fetch a picture and search for a face...")
         res = memento_obj.search_faceset(threshold)
         if res == last_res:
             continue
