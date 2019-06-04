@@ -33,13 +33,13 @@ def analyze_result(result, threshold, n):
         if confidence == -1:
             return -1
         min_confidence = min(min_confidence, confidence)
-        print("Debug info: ", min_confidence, end = " ")
+        #print("Debug info: ", min_confidence, end = " ")
         if i == 0:
             user_id_location, first_user_id = get_id(result)
-            print(first_user_id)
+            #print(first_user_id)
         else:
             user_id_location, user_id = get_id(result)
-            print(user_id)
+            #print(user_id)
             if user_id != first_user_id:
                 return 0
         result = result[user_id_location+12:]

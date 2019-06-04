@@ -29,6 +29,7 @@ def detect_face(threshold):
         print("Debug info: Fetch a picture and search for a face...")
         res = memento_obj.search_faceset(threshold)
         if res == last_res:
+            print("Debug info: Same as the last one")
             continue
         else:
             if res == "new_face" and new_person_counter < 20:
@@ -38,20 +39,20 @@ def detect_face(threshold):
                 # post detection result to web server 5 times
                 for i in range(0,5):
                     requests.get(url = URL, params = PARAMS) 
-                print("adding_" + new_name)
+                print("Debug info: adding_" + new_name)
                 memento_obj.fetch_images(new_name)
                 memento_obj.append_faceset(new_name)
                 URL = URL_PRE + new_name + "_added"
                 # post detection result to web server 5 times
                 for i in range(0,5):
                     requests.get(url = URL, params = PARAMS) 
-                print(new_name + "_added")
+                print("Debug info: " + new_name + "_added")
             else:
                 URL = URL_PRE + res
                 # post detection result to web server 5 times
                 for i in range(0,5):
                     requests.get(url = URL, params = PARAMS) 
-                print(res)
+                print("Debug info: " + res)
                 last_res = res
         
 
