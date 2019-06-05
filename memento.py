@@ -187,12 +187,14 @@ class Memento(object):
     def search_faceset(self, threshold):
         #print("Searching", image_path, "in the faceset...")
 
-        image_path = glob.glob(os.path.join(self.webcam_root, '*'))[0]
+        image_path = sorted(glob.glob(os.path.join(self.webcam_root, '*')))[-1]
 
         if not os.path.exists('../backup'):
             print("creating folder")
             os.mkdir('../backup')
         shutil.copy(image_path, '../backup/tmp.jpg')
+
+        print("Debug info: detecting " + image_path)
 
         result = self.api.search(image_file = File('../backup/tmp.jpg'), outer_id = "memento", return_result_count = 5)
         #print_result(printFuctionTitle("response"), result)
@@ -230,10 +232,9 @@ class Memento(object):
         dirName = self.new_root + name
         if not os.path.exists(dirName):
             os.mkdir(dirName)
-        for i, jpgfile in enumerate(glob.glob(os.path.join('../backup', "*.jpg"))):
-            if i < 1:
-                for j in range(1,6):
-                    shutil.copyfile(jpgfile, dirName+"/"+str(j)+".jpg")
+        image_path = glob.glob(os.path.join('../backup', "*.jpg"))
+        for j in range(1,6):
+            shutil.copyfile(image_path, dirName+"/"+str(j)+".jpg")
 
 
     # append a new category with "name" to the faceset
