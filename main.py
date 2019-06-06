@@ -1,3 +1,5 @@
+import os
+import shutil
 import sys
 import memento
 import time
@@ -18,6 +20,13 @@ def rollback_faceset():
     memento_obj = memento.Memento()
     memento_obj.delete_faceset()
     memento_obj.create_faceset()
+
+
+def clean_new_images():
+    new_root = 'new_images/'
+    if os.path.exists(new_root):
+        shutil.rmtree(new_root)
+    os.mkdir(new_root)
 
 
 def detect_face(threshold):
@@ -61,7 +70,9 @@ if __name__ == "__main__":
         init_faceset()
     elif len(sys.argv) == 2 and sys.argv[1] == '-rollback':
         rollback_faceset()
+    elif len(sys.argv) == 2 and sys.argv[1] == '-clean':
+        clean_new_images()
     elif len(sys.argv) == 3 and sys.argv[1] == '-d':
         detect_face(float(sys.argv[2]))
     else:
-        print('possible parameter:\n -init\n -rollback\n -d threshold')
+        print('possible parameter:\n -init\n -rollback\n -clean\n -d threshold')
