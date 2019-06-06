@@ -187,14 +187,21 @@ class Memento(object):
     def search_faceset(self, threshold):
         #print("Searching", image_path, "in the faceset...")
 
-        image_path = sorted(glob.glob(os.path.join(self.webcam_root, '*')))[0]
+        image_path = ""
+        # avoid reading tmp image file end with "~"
+        while True:
+            image_path = sorted(glob.glob(os.path.join(self.webcam_root, '*')))[0]
+            if image_path[-1] == '~':
+                print("Debug info: ~ Read again...")
+            else:
+                break 
 
         if not os.path.exists('../backup'):
             print("creating folder")
             os.mkdir('../backup')
         shutil.copy(image_path, '../backup/tmp.jpg')
 
-        print("Debug info: detecting " + image_path)
+        print("Debug info: Detecting " + image_path)
 
         result = self.api.search(image_file = File('../backup/tmp.jpg'), outer_id = "memento", return_result_count = 5)
         #print_result(printFuctionTitle("response"), result)
