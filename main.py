@@ -61,7 +61,7 @@ if __name__ == "__main__":
         init_faceset()
     elif len(sys.argv) == 2 and sys.argv[1] == '-rollback':
         rollback_faceset()
-    elif len(sys.argv) == 3 and sys.argv[1] == '-detect':
+    elif len(sys.argv) == 3 and sys.argv[1] == '-d':
         detect_face(float(sys.argv[2]))
     else:
-        print('possible parameter:\n -init\n -detect threshold')
+        print('possible parameter:\n -init\n -rollback\n -d threshold')

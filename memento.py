@@ -187,7 +187,7 @@ class Memento(object):
     def search_faceset(self, threshold):
         #print("Searching", image_path, "in the faceset...")
 
-        image_path = sorted(glob.glob(os.path.join(self.webcam_root, '*')))[-1]
+        image_path = sorted(glob.glob(os.path.join(self.webcam_root, '*')))[0]
 
         if not os.path.exists('../backup'):
             print("creating folder")
