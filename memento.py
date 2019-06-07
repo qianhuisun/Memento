@@ -169,13 +169,14 @@ class Memento(object):
             # add all tokens into the faceset
             tokens = ""
             while True:
-                print(tokens)
                 face_token = token_file.readline()[:-1]
                 if not face_token:
                     break
                 tokens = tokens + face_token + ","
             if tokens != "":
                 tokens = tokens[:-1]
+            print("Debug info: Adding Person", i)
+            print(tokens)
             # NOTE can upload 5 tokens at the same time
             result = self.api.faceset.addface(outer_id = "memento", face_tokens = tokens)
             token_file.close()
