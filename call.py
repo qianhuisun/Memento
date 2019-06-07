@@ -8,6 +8,8 @@ import requests
 URL_PRE = "http://eecs338.herokuapp.com/setname/"
 PARAMS = {'address':'Northwestern'} 
 
+
+# Train a model on Face++ server with the training image data.
 def init_faceset():
     memento_obj = memento.Memento()
     memento_obj.image_to_token()
@@ -16,19 +18,20 @@ def init_faceset():
     memento_obj.create_faceset()
 
 
+# (must be run after “-init”) Delete all the new face categories in the model on Face++ server.
 def rollback_faceset():
     memento_obj = memento.Memento()
     memento_obj.delete_faceset()
     memento_obj.create_faceset()
 
 
+# Delete all the new face images locally.
 def clean_new_images():
-    new_root = 'new_images/'
-    if os.path.exists(new_root):
-        shutil.rmtree(new_root)
-    os.mkdir(new_root)
+    memento_obj = memento.Memento()
+    memento_obj.clean_new_images()
 
 
+# Detect faces in images periodically and try to return names they belong to.
 def detect_face(threshold):
     memento_obj = memento.Memento()
     new_person_counter = 0
@@ -49,6 +52,7 @@ def detect_face(threshold):
             last_res = res
 
 
+# Detect faces periodically and appends new face categories into our database and model on Face++ server.
 def detect_face_with_append(threshold):
     memento_obj = memento.Memento()
     new_person_counter = 0
@@ -86,15 +90,20 @@ def detect_face_with_append(threshold):
         
 
 if __name__ == "__main__":
+    # Train a model on Face++ server with the training image data.
     if len(sys.argv) == 2 and sys.argv[1] == '-init':
         init_faceset()
+    # (must be run after “-init”) Delete all the new face categories in the model on Face++ server.
     elif len(sys.argv) == 2 and sys.argv[1] == '-rollback':
         rollback_faceset()
+    # Delete all the new face images locally.
     elif len(sys.argv) == 2 and sys.argv[1] == '-clean':
         clean_new_images()
+    # Detect faces in images periodically and try to return names they belong to.
     elif len(sys.argv) == 3 and sys.argv[1] == '-d':
         detect_face(float(sys.argv[2]))
-    elif len(sys.argv) == 3 and sys.argv[1] == '-dwa':
+    # Detect faces periodically and add new face categories into our database and model on Face++ server.
+    elif len(sys.argv) == 3 and sys.argv[1] == '-d' and sys.argv[2] == '-a':
         detect_face_with_append(float(sys.argv[2]))
     else:
-        print('possible parameter:\n -init\n -rollback\n -clean\n -d threshold\n -dwa threshold')
+        print('possible parameter:\n -init\n -rollback\n -clean\n -d x    (x stands for threshold of confidence [0,100])\n -d -a x (x stands for threshold of confidence [0,100])')
